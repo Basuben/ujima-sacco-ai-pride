@@ -32,11 +32,11 @@ The form has two pre-filled sample applicants, one strong and one risky, so anyo
 
 I would rather state these than have someone find them:
 
-- The policy rules are given to the model in its instructions. They are not yet enforced by separate code, so the 3x savings limit and the debt-to-income ceiling are not double-checked.
+- The policy rules are given to the model in its instructions. They are not yet enforced by separate code, so the 3x savings limit and the debt-to-income target are not double-checked.
 - Age is collected and passed to the model. That needs a fairness review before any real use, and there has been no bias testing yet.
 - The model can give slightly different answers to the same application on different runs.
 - Applications are stored in the browser only. There is no database, no login and no permanent audit trail.
-- The headline figures on the landing page are illustrative. They are not measured results.
+- The decision card on the landing page is a fixed sample, not a real application. No speed or accuracy figures have been measured.
 - All applicants are made-up sample data.
 
 ## What I would build next
