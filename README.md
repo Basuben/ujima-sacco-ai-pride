@@ -52,7 +52,7 @@ TanStack Start with React 19 and TypeScript, Tailwind CSS 4, shadcn/ui and Radix
 
 ## Source code
 
-The source lives in a private repository. I am happy to share access or walk through it on request.
+The application code is in [dear-dialogue-hub](https://github.com/Basuben/dear-dialogue-hub), with setup steps in its README. It needs an AI gateway key to run the scoring step.
 
 ## About
 
