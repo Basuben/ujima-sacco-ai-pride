@@ -11,7 +11,7 @@ Loan officers at a SACCO read each application by hand, check it against rules l
 1. **The member applies.** A guided form collects personal and employment details, income, expenses, existing debt, savings, membership history, the loan request, collateral and guarantors.
 2. **The AI underwrites.** The application is scored against SACCO policy. The result comes back in a fixed structure: a decision (approve, review or reject), a risk level, a credit score from 0 to 100, a suggested amount, term and interest rate, the estimated monthly payment, the debt-to-income ratio, a short plain-language rationale, positive factors, risk factors and recommendations.
 3. **The officer confirms.** Applications land in a queue. The officer opens any of them, reads the reasoning, and can override the AI with one click.
-4. **The portfolio view updates.** An analytics page shows approval rate, risk distribution and amounts approved by loan purpose. It is calculated from the officer's final decision, not the AI's first one.
+4. **The portfolio view updates.** An analytics page shows approval rate, amount disbursed, decision mix, risk distribution and amounts by loan purpose. Approval rate, amount disbursed and decision mix use the officer's final decision. The risk chart uses the AI's risk level on purpose, because risk describes the applicant. One chart has a known defect, see the limitations below.
 
 The form has two pre-filled sample applicants, one strong and one risky, so anyone testing the demo can see both ends of the range straight away.
 
@@ -24,7 +24,7 @@ The form has two pre-filled sample applicants, one strong and one risky, so anyo
 
 ## Ethical design choices
 
-- **A human decides.** The AI recommends and the loan officer has the final say. Overrides are respected everywhere, including the analytics.
+- **A human decides.** The AI recommends and the loan officer has the final say. Overrides change the queue, the approval rate, the amount disbursed and the decision mix.
 - **Every decision is explained.** The officer sees the rationale and the factors for and against, in plain language, not just a score.
 - **Output is checked, not trusted.** The AI's response has to match a strict schema. If it does not, the application fails loudly instead of showing a made-up decision.
 
@@ -32,6 +32,7 @@ The form has two pre-filled sample applicants, one strong and one risky, so anyo
 
 I would rather state these than have someone find them:
 
+- **Known defect (D-01):** the "disbursed by purpose" chart adds the AI approved amount for every application, including rejected ones, so it can disagree with the headline disbursed figure. The fix is written up as backlog item B-01 in the docs.
 - The policy rules are given to the model in its instructions. They are not yet enforced by separate code, so the 3x savings limit and the debt-to-income target are not double-checked.
 - Age is collected and passed to the model. That needs a fairness review before any real use, and there has been no bias testing yet.
 - The model can give slightly different answers to the same application on different runs.
@@ -41,10 +42,19 @@ I would rather state these than have someone find them:
 
 ## What I would build next
 
-1. Deterministic checks behind the model for the savings limit, debt-to-income and default rules.
-2. Fairness testing across varied synthetic profiles, and a decision on whether age should be an input at all.
-3. A proper audit log recording who overrode what, and when.
-4. Repeatability tests: the same application run many times, with differences tracked.
+1. Fix D-01 so the purpose chart only counts approved loans.
+2. Deterministic checks behind the model for the savings limit, debt-to-income and default rules.
+3. Fairness testing across varied synthetic profiles, and a decision on whether age should be an input at all.
+4. A proper audit log recording who overrode what, when and why.
+5. Repeatability tests: the same application run many times, with differences tracked.
+
+## Business analysis documents
+
+I wrote these from the finished app to show how I would document and test it. They describe what the app does today and what I would change next.
+
+- [Requirements](docs/requirements.md): personas, scope, user stories with acceptance criteria, prioritised backlog, defect log and data dictionary.
+- [Process flows](docs/process-flows.md): a swimlane flow in the style of BPMN and a UML sequence diagram.
+- [UAT test cases](docs/uat-test-cases.md): twelve test cases. None have been run yet, because scoring needs a live gateway key.
 
 ## Stack
 
